@@ -1,16 +1,21 @@
 const express = require('express');
+const cors = require('cors');
 const socketio = require('socket.io');
 const http = require('http');
+const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const locationRoutes = require('./routes/location');
 const activityRoutes = require('./routes/activity');
 
+// Load environment variables
+dotenv.config();
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-// Connect DB
+// Connect to MongoDB
 connectDB();
 
 // Middleware
@@ -35,5 +40,6 @@ io.on('connection', (socket) => {
   });
 });
 
+// Start the server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
